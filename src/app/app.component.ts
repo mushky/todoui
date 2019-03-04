@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
           console.log(res['content']);
           this.todos.push(res['content'][i]);
         }
-      })
+      });
   }
 
   addNewTodo() {
@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
     }
     
     return this.apiService.createTodo(newTodo)
-      .subscribe(todo => this.todos.push(todo))
+      .subscribe(this.todos.push(newTodo))
     
   }
 
