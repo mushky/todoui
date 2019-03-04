@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './services/api.service';
 import { Todo } from './models/todo';
+import { map } from "rxjs/operators";
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,8 @@ export class AppComponent implements OnInit {
   }
 
   getAllTodos() {
-    this.apiService.getTodos()  
+    this.todos = [];
+    this.apiService.getTodos()
       .subscribe((res) => {
         for (let i = 0; i <= res['content'].length - 1; i++) {
           console.log(res['content']);
@@ -38,10 +40,12 @@ export class AppComponent implements OnInit {
       'text': this.todo,
       'complete': false
     }
-    
-    return this.apiService.createTodo(newTodo)
-      .subscribe(this.todos.push(newTodo))
-    
+    this.apiService.createTodo(newTodo)
+      .subscribe(todo => this.todos.push(todo))
+
+    setTimeout(() => {
+      this.getAllTodos();
+    },100);
   }
 
   deleteTodo(todo: Todo): void {
@@ -53,6 +57,10 @@ export class AppComponent implements OnInit {
   completeTodo(todo: Todo): void {
     this.apiService.completeTodo(todo)
       .subscribe();
+
+    setTimeout(() => {
+      this.getAllTodos();
+    },100);
   }
 
 }
